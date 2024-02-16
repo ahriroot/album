@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Album</title>
     <style>
+        [v-cloak] {
+            display: none;
+        }
+
         * {
             padding: 0;
             margin: 0;
@@ -72,7 +76,7 @@
             background-color: #e0e0e0;
         }
 
-        @media screen and (max-width: 992px){
+        @media screen and (max-width: 992px) {
             header .container {
                 width: 90%;
             }
@@ -97,7 +101,7 @@
             <div class="userinfo">ahriknow</div>
         </div>
     </header>
-    <main id="app">
+    <main id="app" v-cloak>
         <div class="container">
             <img v-for="item in data" :key="item.id" :src="item.url" :alt="item.title" style="width: 100%;">
         </div>
