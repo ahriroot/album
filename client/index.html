@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        header {
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+            height: 60px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        header .container {
+            width: 80%;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        header .userinfo {
+            font-size: 2rem;
+        }
+
+        main {
+            width: 80%;
+            min-height: 100%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        main .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+        }
+
+        main .scrollerFooter {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        main .scrollerFooter .msg {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        main .scrollerFooter .msg:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media screen and (max-width: 992px){
+            header .container {
+                width: 90%;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            header .container {
+                width: 100%;
+            }
+
+            main .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Album</div>
+            <div class="userinfo">ahriknow</div>
+        </div>
+    </header>
+    <main id="app">
+        <div class="container">
+            <img v-for="item in data" :key="item.id" :src="item.url" :alt="item.title" style="width: 100%;">
+        </div>
+        <div class="scrollerFooter">
+            <span class="msg" @click="handleGetData">{{ message }}</span>
+        </div>
+    </main>
+    <script src="vue.js"></script>
+    <script>
+
+        const request = (url) => {
+            // fetch
+            return fetch(url).then(res => res.json())
+        }
+
+        const { createApp, ref, onMounted, onBeforeMount } = Vue
+
+        createApp({
+            setup() {
+                const data = ref([])
+
+                const message = ref('Loading...')
+
+                const handleGetData = () => {
+                    message.value = 'Loading...'
+                    const url = `/album?skip=${data.value.length}&limit=9`
+                    request(url).then(res => {
+                        if (res.data.length === 0) {
+                            message.value = 'No more data'
+                            return
+                        }
+                        data.value = [...data.value, ...res.data]
+                    })
+                }
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            handleGetData();
+                        }
+                    });
+                });
+
+                // mounted
+                onMounted(() => {
+                    observer.observe(document.querySelector('.scrollerFooter'))
+                })
+
+                onBeforeMount(() => {
+                    observer.disconnect()
+                })
+
+                return {
+                    data,
+                    message,
+                    handleGetData
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

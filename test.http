@@ -11,6 +11,6 @@ POST http://127.0.0.1:3000/album
 Content-Type: application/json
 
 {
-    "desc": "Album 1",
-    "url": "url 1"
+    "desc": "Album xxx",
+    "url": "https://fastly.picsum.photos/id/143/200/200.jpg?hmac=zGj8dhmmqaaQZDcHhU9C0itdL12zcGTpuVdQiVrYiEQ"
 }

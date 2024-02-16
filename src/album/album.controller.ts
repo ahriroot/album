@@ -13,7 +13,7 @@ export class AlbumController {
   }
 
   @Get()
-  findAll(@Query() query: {page?: number, size?: number}) {
+  findAll(@Query() query: {skip?: number, limit?: number}) {
     return this.albumService.findAll(query);
   }
 
