@@ -1,0 +1,16 @@
+### Get
+GET http://127.0.0.1:3000/album
+Content-Type: application/json
+
+### Get by id
+GET http://127.0.0.1:3000/album/1
+Content-Type: application/json
+
+### Post
+POST http://127.0.0.1:3000/album
+Content-Type: application/json
+
+{
+    "desc": "Album 1",
+    "url": "url 1"
+}
